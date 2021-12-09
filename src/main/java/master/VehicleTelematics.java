@@ -1,6 +1,7 @@
-package es.upm.lsd.master;
+package master;
 
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -12,6 +13,8 @@ public class VehicleTelematics {
     public static void main(String[] args) throws Exception {
         // Set up the streaming execution environment
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
+        env.setParallelism(1); // todo: check how to use properly
 
         final String INPUT_FILE_PATH = args[0];
         final String OUTPUT_FOLDER_PATH = args[1];
@@ -25,11 +28,13 @@ public class VehicleTelematics {
                         new MapFunction<String, VehicleReport>() {
                             VehicleReport vr = new VehicleReport();
 
-                            // Assumed data format: [Time, VID, Spd, XWay, Lane, Dir, Seg, Pos]
+                            // Expected data format: [Time, VID, Spd, XWay, Lane, Dir, Seg, Pos]
                             public VehicleReport map(String in) throws Exception {
                                 String[] fieldArray = in.split(",");
                                 vr.setTime(Integer.parseInt(fieldArray[0]));
-                                vr.setVid(String.parseString(fieldArray[1])); //FIXME
+                                // vr.setVid((fieldArray[1]));
+                                // xxx: Use int type for vid to key on it??
+                                vr.setVid(Integer.parseInt(fieldArray[1]));
                                 vr.setSpeed(Integer.parseInt(fieldArray[2]));
                                 vr.setHighway(Integer.parseInt(fieldArray[3]));
                                 vr.setLane(Integer.parseInt(fieldArray[4]));

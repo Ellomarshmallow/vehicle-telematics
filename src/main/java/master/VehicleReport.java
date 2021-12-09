@@ -1,8 +1,8 @@
-package es.upm.lsd.master;
+package master;
 
 public class VehicleReport {
     public int time;
-    public String vid;
+    public int vid;
     public int speed;
     public int highway;
     public int lane;
@@ -14,7 +14,7 @@ public class VehicleReport {
         return time;
     }
 
-    public String getVid() {
+    public int getVid() {
         return vid;
     }
 
@@ -46,7 +46,7 @@ public class VehicleReport {
         this.time = time;
     }
 
-    public void setVid(String vid) {
+    public void setVid(int vid) {
         this.vid = vid;
     }
 
