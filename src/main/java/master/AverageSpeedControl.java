@@ -1,4 +1,4 @@
-package es.upm.lsd.master;
+package master;
 
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.functions.timestamps.AscendingTimestampExtractor;
@@ -12,6 +12,7 @@ import org.apache.flink.api.java.tuple.Tuple6;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 
 public class AverageSpeedControl {
+<<<<<<< HEAD:src/main/java/es/upm/lsd/master/AverageSpeedControl.java
     public static SingleOutputStreamOperator detectAvgSpeeding (SingleOutputStreamOperator<VehicleReport> tuples) {
         return tuples;
 
@@ -88,6 +89,11 @@ public class AverageSpeedControl {
                 col.collect(output);
 
             }
+=======
+    public static SingleOutputStreamOperator detectAvgSpeeding(
+            SingleOutputStreamOperator<VehicleReport> tuples) {
+        return tuples;
+>>>>>>> main:src/main/java/master/AverageSpeedControl.java
     }
     
 }

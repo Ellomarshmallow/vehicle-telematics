@@ -1,15 +1,32 @@
-package es.upm.lsd.master;
+package master;
 
+<<<<<<< HEAD:src/main/java/es/upm/lsd/master/VehicleReport.java
 import org.apache.flink.api.java.tuple.Tuple8;
 
 public class VehicleReport extends Tuple8<Integer,String,Integer,Integer,Integer,Integer,Integer,Integer> {
+=======
+public class VehicleReport {
+    public int time;
+    public int vid;
+    public int speed;
+    public int highway;
+    public int lane;
+    public int direction;
+    public int segment;
+    public int position;
+>>>>>>> main:src/main/java/master/VehicleReport.java
 
     public int getTime() {
         return f0;
     }
 
+<<<<<<< HEAD:src/main/java/es/upm/lsd/master/VehicleReport.java
     public String getVid() {
         return f1;
+=======
+    public int getVid() {
+        return vid;
+>>>>>>> main:src/main/java/master/VehicleReport.java
     }
 
     public int getSpeed() {
@@ -40,8 +57,13 @@ public class VehicleReport extends Tuple8<Integer,String,Integer,Integer,Integer
        f0 = time;
     }
 
+<<<<<<< HEAD:src/main/java/es/upm/lsd/master/VehicleReport.java
     public void setVid(String vid) {
         f1 = vid;
+=======
+    public void setVid(int vid) {
+        this.vid = vid;
+>>>>>>> main:src/main/java/master/VehicleReport.java
     }
 
     public void setSpeed(int speed) {
