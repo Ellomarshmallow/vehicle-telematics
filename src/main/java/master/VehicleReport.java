@@ -4,7 +4,11 @@ import org.apache.flink.api.java.tuple.Tuple8;
 
 public class VehicleReport extends Tuple8<Integer,Integer,Integer,Integer,Integer,Integer,Integer,Integer> {
 
-    public int getTime() {
+    public VehicleReport (){
+        
+    }
+
+    public Integer getTime() {
         return f0;
     }
 
@@ -12,27 +16,27 @@ public class VehicleReport extends Tuple8<Integer,Integer,Integer,Integer,Intege
         return f1;
     }
 
-    public int getSpeed() {
+    public Integer getSpeed() {
         return f2;
     }
 
-    public int getHighway() {
+    public Integer getHighway() {
         return f3;
     }
 
-    public int getLane() {
+    public Integer getLane() {
         return f4;
     }
 
-    public int getDirection() {
+    public Integer getDirection() {
         return f5;
     }
 
-    public int getSegment() {
+    public Integer getSegment() {
         return f6;
     }
 
-    public int getPosition() {
+    public Integer getPosition() {
         return f7;
     }
 

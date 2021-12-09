@@ -13,8 +13,8 @@ import org.apache.flink.api.java.tuple.Tuple6;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 
 public class AverageSpeedControl {
-    public static SingleOutputStreamOperator detectAvgSpeeding (SingleOutputStreamOperator<VehicleReport> output) {
-        return output;
+    public static SingleOutputStreamOperator detectAvgSpeeding(SingleOutputStreamOperator<VehicleReport> output) {
+        return output
 
         // We create a filter to select the tuples that are in the segment from 52 to 56
         .filter(new FilterFunction<VehicleReport>() {
@@ -34,17 +34,14 @@ public class AverageSpeedControl {
 
             @Override
             public long extractAscendingTimeStamp(VehicleReport v){
-
-                return v.getTime() * 1000;
-
+                return v.getTime()*1000;
             }
         })
 
         //We convert into KeyStream to use the same report
-        .keyBy(new KeySelector<VehicleReport, AverageSpeedControlKey>(){
+        .keyBy(new KeySelector<VehicleReport, AverageSpeedControlKey>() {
 
             AverageSpeedControlKey speedKey = new AverageSpeedControlKey();
-
             @Override
             public AverageSpeedControlKey getKey(VehicleReport v) throws Exception {
                 speedKey.f0 = v.getHighway();
@@ -52,19 +49,21 @@ public class AverageSpeedControl {
                 speedKey.f2 = v.getDirection();
                 return speedKey;
             }
+
         })
 
-    .window(EventTimeSessionWindows().withGap(Time.seconds(30)))
+    .window(EventTimeSessionWindows.withGap(Time.seconds(31)))
     .apply(new AverageWindow());
         
     }
     public static class AverageSpeedControlKey extends Tuple3<Integer, Integer, Integer>{
     }
 
-    private static class AverageWindow implements WindowFunction<VehicleReport, AverageSpeedControlKey, Tuple6<Double, Integer, Integer, Integer, Integer, Integer>, TimeWindow, Tuple3<Integer, Integer, Integer> {
+    private static class AverageWindow implements WindowFunction<VehicleReport,Tuple6<Double, Integer, Integer, Integer, Integer, Integer>,Tuple3<Integer, Integer, Integer>,TimeWindow>{
         
         @Override
-        public void apply (Tuple3<String, Integer, Integer> key, Iterable<VehicleReport> report, Collector<Tuple6<Double, Integer, Integer, Integer, Integer, Integer>> col, TimeWindow window) {
+        public void apply(Tuple3<Integer, Integer, Integer> key,TimeWindow window, Iterable<VehicleReport> report, Collector<Tuple6<Double, Integer, Integer, Integer, Integer, Integer>> col) {
+
             int initialPos = Integer.MAX_VALUE;
             int initialTime = Integer.MAX_VALUE;
             int finalPos = -1;
@@ -83,7 +82,7 @@ public class AverageSpeedControl {
 
             }
             // We calculate the average speed. We conver the position to Double and convert the unit of measurement  
-            double averageSpeed = (finalPos - initialPos) * 1.0 / (finalTime - initialTime) * 2.23694;
+            Double averageSpeed = (finalPos - initialPos) * 1.0 / (finalTime - initialTime) * 2.23694;
 
             //Now we take the values that exceed the speed limit and completed the segment
             if( averageSpeed > 60 && firstSegment == 52 && lastSegment == 56){
@@ -91,6 +90,7 @@ public class AverageSpeedControl {
                 col.collect(output);
 
             }
+        }
         
     }
     
