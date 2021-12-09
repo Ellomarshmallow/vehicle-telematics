@@ -1,19 +1,20 @@
 package master;
 
+import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.functions.timestamps.AscendingTimestampExtractor;
-import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
-import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.streaming.api.functions.windowing.WindowFunction;
+import org.apache.flink.streaming.api.windowing.time.Time;
+import org.apache.flink.streaming.api.windowing.assigners.EventTimeSessionWindows;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.util.Collector;
 import org.apache.flink.api.java.tuple.Tuple6;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 
 public class AverageSpeedControl {
-    public static SingleOutputStreamOperator detectAvgSpeeding (SingleOutputStreamOperator<VehicleReport> tuples) {
-        return tuples;
+    public static SingleOutputStreamOperator detectAvgSpeeding (SingleOutputStreamOperator<VehicleReport> output) {
+        return output;
 
         // We create a filter to select the tuples that are in the segment from 52 to 56
         .filter(new FilterFunction<VehicleReport>() {
@@ -25,20 +26,22 @@ public class AverageSpeedControl {
                 else{
                     return false;
                 }
-        }         
+            }         
         })
 
         //We assign the timestamp and watermarks with time
-        .assignTimeStampsAndWatermarks(new AscendingTimestampExtractor<VehicleReport>(){
+        .assignTimeStampsAndWatermarks(new AscendingTimestampExtractor<VehicleReport>() {
+
             @Override
             public long extractAscendingTimeStamp(VehicleReport v){
-                return v.getTime() * 1000;
-            }
 
+                return v.getTime() * 1000;
+
+            }
         })
 
         //We convert into KeyStream to use the same report
-        .keyBy(new KeySelector<VehicleReport, <AverageSpeedControlKey>() {
+        .keyBy(new KeySelector<VehicleReport, AverageSpeedControlKey>(){
 
             AverageSpeedControlKey speedKey = new AverageSpeedControlKey();
 
@@ -88,6 +91,7 @@ public class AverageSpeedControl {
                 col.collect(output);
 
             }
+        
     }
     
 }
