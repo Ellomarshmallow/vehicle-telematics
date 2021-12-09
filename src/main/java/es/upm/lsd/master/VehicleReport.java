@@ -1,76 +1,74 @@
 package es.upm.lsd.master;
 
-public class VehicleReport {
-    public int time;
-    public String vid;
-    public int speed;
-    public int highway;
-    public int lane;
-    public int direction;
-    public int segment;
-    public int position;
+import org.apache.flink.api.java.tuple.Tuple8;
+
+public class VehicleReport extends Tuple8<Integer,String,Integer,Integer,Integer,Integer,Integer,Integer> {
 
     public int getTime() {
-        return time;
+        return f0;
     }
 
     public String getVid() {
-        return vid;
+        return f1;
     }
 
     public int getSpeed() {
-        return speed;
+        return f2;
     }
 
     public int getHighway() {
-        return highway;
+        return f3;
     }
 
-    public void getLane(int lane) {
-        this.lane = lane;
+    public int getLane() {
+        return f4;
     }
 
     public int getDirection() {
-        return direction;
+        return f5;
     }
 
     public int getSegment() {
-        return segment;
+        return f6;
     }
 
     public int getPosition() {
-        return position;
+        return f7;
     }
 
     public void setTime(int time) {
-        this.time = time;
+       f0 = time;
     }
 
     public void setVid(String vid) {
-        this.vid = vid;
+        f1 = vid;
     }
 
     public void setSpeed(int speed) {
-        this.speed = speed;
+        f2 = speed;
     }
 
     public void setHighway(int highway) {
-        this.highway = highway;
+        f3 = highway;
     }
 
     public void setLane(int lane) {
-        this.lane = lane;
+        f4 = lane;
     }
 
     public void setDirection(int direction) {
-        this.direction = direction;
+        f5 = direction;
     }
 
     public void setSegment(int segment) {
-        this.segment = segment;
+        f6 = segment;
     }
 
     public void setPosition(int position) {
-        this.position = position;
+        f7 = position;
+    }
+
+    String speedFineOutput(VehicleReport result) {
+        return String.format("%s,%s,%s,%s,%s,%s", result.getTime(),result.getVid(), result.getDirection(),result.getHighway(), result.getLane(),result.getSegment(),result.getSpeed());
     }
 }
