@@ -2,11 +2,10 @@ package master;
 
 import org.apache.flink.api.java.tuple.Tuple8;
 
-public class VehicleReport extends Tuple8<Integer,Integer,Integer,Integer,Integer,Integer,Integer,Integer> {
+public class VehicleReport
+        extends Tuple8<Integer, Integer, Integer, Integer, Integer, Integer, Integer, Integer> {
 
-    public VehicleReport (){
-        
-    }
+    public VehicleReport() {}
 
     public Integer getTime() {
         return f0;
@@ -41,7 +40,7 @@ public class VehicleReport extends Tuple8<Integer,Integer,Integer,Integer,Intege
     }
 
     public void setTime(int time) {
-       f0 = time;
+        f0 = time;
     }
 
     public void setVid(int vid) {
@@ -71,5 +70,4 @@ public class VehicleReport extends Tuple8<Integer,Integer,Integer,Integer,Intege
     public void setPosition(int position) {
         f7 = position;
     }
-
 }
