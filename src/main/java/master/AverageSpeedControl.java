@@ -49,25 +49,25 @@ public class AverageSpeedControl {
 
         })
     
-
+    // We create a Session Window and then we apply the window function to each car
     .window(EventTimeSessionWindows.withGap(Time.seconds(31)))
     .apply(new AverageSpeedControlWindow());
         
     }
    
-
+    //In this method the cars that have averageSpeeds greater than 60 will be selected included in the output results
     private static class AverageSpeedControlWindow implements WindowFunction<VehicleReport,Tuple6<Integer, Integer, Integer, Integer, Integer, Double>,Tuple3<Integer, Integer, Integer>,TimeWindow>{
         
         @Override
         public void apply(Tuple3<Integer, Integer, Integer> key, TimeWindow window, Iterable<VehicleReport> report, Collector<Tuple6<Integer, Integer, Integer, Integer, Integer, Double>> col) {
 
+            //We take the positions and the times of the car
             int initialPos = Integer.MAX_VALUE;
             int initialTime = Integer.MAX_VALUE;
             int finalPos = -1;
             int finalTime = -1;
             int firstSegment = Integer.MAX_VALUE;
             int lastSegment = -1;
-
 
             for(VehicleReport v: report){
                 initialTime = Integer.min(initialTime, v.getTime());
@@ -78,10 +78,10 @@ public class AverageSpeedControl {
                 lastSegment = Integer.max(lastSegment, v.getSegment());
 
             }
-            // We calculate the average speed. We conver the position to Double and convert the unit of measurement  
+            // We calculate the average speed. We convert the position to Double and convert the unit of measurement to mph
             Double averageSpeed = (finalPos - initialPos) * 1.0 / (finalTime - initialTime) * 2.23694;
 
-            //Now we take the values that exceed the speed limit and completed the segment
+            //Now we take the values that exceed the speed limit and completed the full segment
             if( averageSpeed > 60 && firstSegment == 52 && lastSegment == 56){
                 Tuple6<Integer, Integer, Integer, Integer, Integer, Double> result = new Tuple6( initialTime, finalTime, key.f0, key.f1, key.f2, averageSpeed);
                 col.collect(result);
