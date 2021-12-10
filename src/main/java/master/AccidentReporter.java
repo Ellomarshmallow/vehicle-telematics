@@ -44,19 +44,12 @@ public class AccidentReporter {
         int numEvents= 1;
         Iterator<VehicleReport>  it = report.iterator();
 
-        int firstEvent= it.next().getTime();
+        Integer firstEvent= it.next().getTime();
         while(it.hasNext()){
             numEvents++;
-            int lastEvent = it.next().getTime();
+            Integer lastEvent = it.next().getTime();
             if(numEvents > 4){
-                AccidentReport accidentReport = new AccidentReport();
-                accidentReport.setTime1(firstEvent);
-                accidentReport.setTime2(lastEvent);
-                accidentReport.setVid(key.f0);
-                accidentReport.setHighway(key.f1);
-                accidentReport.setSegment(key.f2);
-                accidentReport.setDirection(key.f3);
-                accidentReport.setPosition(key.f4);
+                AccidentReport accidentReport = new AccidentReport(firstEvent, lastEvent, key.f0,key.f1,key.f2,key.f3,key.f4);
                 col.collect(accidentReport);
 
             }

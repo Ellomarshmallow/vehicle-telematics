@@ -4,8 +4,12 @@ import org.apache.flink.api.java.tuple.Tuple7;
 
 public class AccidentReport extends Tuple7<Integer,Integer,Integer,Integer,Integer,Integer,Integer> {
 
-    public AccidentReport(){
+    public AccidentReport(Integer firstEvent,Integer lastEvent, Integer f0, Integer f1,Integer f2,Integer f3,Integer f4){
+        super(firstEvent,lastEvent,f0,f1,f2,f3,f4);
 
+    }
+    public AccidentReport(){
+        
     }
 
     public void setTime1(int time1) {
