@@ -56,10 +56,10 @@ public class AverageSpeedControl {
     }
    
 
-    private static class AverageSpeedControlWindow implements WindowFunction<VehicleReport,Tuple6<Double, Integer, Integer, Integer, Integer, Integer>,Tuple3<Integer, Integer, Integer>,TimeWindow>{
+    private static class AverageSpeedControlWindow implements WindowFunction<VehicleReport,Tuple6<Integer, Integer, Integer, Integer, Integer, Double>,Tuple3<Integer, Integer, Integer>,TimeWindow>{
         
         @Override
-        public void apply(Tuple3<Integer, Integer, Integer> key, TimeWindow window, Iterable<VehicleReport> report, Collector<Tuple6<Double, Integer, Integer, Integer, Integer, Integer>> col) {
+        public void apply(Tuple3<Integer, Integer, Integer> key, TimeWindow window, Iterable<VehicleReport> report, Collector<Tuple6<Integer, Integer, Integer, Integer, Integer, Double>> col) {
 
             int initialPos = Integer.MAX_VALUE;
             int initialTime = Integer.MAX_VALUE;
@@ -83,7 +83,7 @@ public class AverageSpeedControl {
 
             //Now we take the values that exceed the speed limit and completed the segment
             if( averageSpeed > 60 && firstSegment == 52 && lastSegment == 56){
-                Tuple6<Double, Integer, Integer, Integer, Integer, Integer> result = new Tuple6(averageSpeed, initialTime, finalTime, key.f0, key.f1, key.f2);
+                Tuple6<Integer, Integer, Integer, Integer, Integer, Double> result = new Tuple6( initialTime, finalTime, key.f0, key.f1, key.f2, averageSpeed);
                 col.collect(result);
 
             }
