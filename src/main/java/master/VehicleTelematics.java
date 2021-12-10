@@ -14,7 +14,7 @@ public class VehicleTelematics {
         // Set up the streaming execution environment
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
-        env.setParallelism(1); // todo: check how to use properly
+        env.setParallelism(1);
 
         final String INPUT_FILE_PATH = args[0];
         final String OUTPUT_FOLDER_PATH = args[1];
@@ -32,8 +32,6 @@ public class VehicleTelematics {
                             public VehicleReport map(String in) throws Exception {
                                 String[] fieldArray = in.split(",");
                                 vr.setTime(Integer.parseInt(fieldArray[0]));
-                                // vr.setVid((fieldArray[1]));
-                                // xxx: Use int type for vid to key on it??
                                 vr.setVid(Integer.parseInt(fieldArray[1]));
                                 vr.setSpeed(Integer.parseInt(fieldArray[2]));
                                 vr.setHighway(Integer.parseInt(fieldArray[3]));
