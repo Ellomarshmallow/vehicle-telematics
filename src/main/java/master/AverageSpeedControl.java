@@ -30,39 +30,36 @@ public class AverageSpeedControl {
         })
 
         //We assign the timestamp and watermarks with time
-        .assignTimeStampsAndWatermarks(new AscendingTimestampExtractor<VehicleReport>() {
+        .assignTimestampsAndWatermarks(new AscendingTimestampExtractor<VehicleReport>() {
 
             @Override
-            public long extractAscendingTimeStamp(VehicleReport v){
+            public long extractAscendingTimestamp(VehicleReport v) {
                 return v.getTime()*1000;
             }
         })
 
         //We convert into KeyStream to use the same report
-        .keyBy(new KeySelector<VehicleReport, AverageSpeedControlKey>() {
+        .keyBy(new KeySelector<VehicleReport, Tuple3<Integer,Integer,Integer>>(){
 
-            AverageSpeedControlKey speedKey = new AverageSpeedControlKey();
             @Override
-            public AverageSpeedControlKey getKey(VehicleReport v) throws Exception {
-                speedKey.f0 = v.getHighway();
-                speedKey.f1 = v.getVid();
-                speedKey.f2 = v.getDirection();
-                return speedKey;
+            public Tuple3<Integer,Integer,Integer> getKey(VehicleReport v) {
+                return Tuple3.of( v.getHighway(), v.getVid(), v.getDirection());
+                
             }
 
         })
+    
 
     .window(EventTimeSessionWindows.withGap(Time.seconds(31)))
-    .apply(new AverageWindow());
+    .apply(new AverageSpeedControlWindow());
         
     }
-    public static class AverageSpeedControlKey extends Tuple3<Integer, Integer, Integer>{
-    }
+   
 
-    private static class AverageWindow implements WindowFunction<VehicleReport,Tuple6<Double, Integer, Integer, Integer, Integer, Integer>,Tuple3<Integer, Integer, Integer>,TimeWindow>{
+    private static class AverageSpeedControlWindow implements WindowFunction<VehicleReport,Tuple6<Double, Integer, Integer, Integer, Integer, Integer>,Tuple3<Integer, Integer, Integer>,TimeWindow>{
         
         @Override
-        public void apply(Tuple3<Integer, Integer, Integer> key,TimeWindow window, Iterable<VehicleReport> report, Collector<Tuple6<Double, Integer, Integer, Integer, Integer, Integer>> col) {
+        public void apply(Tuple3<Integer, Integer, Integer> key, TimeWindow window, Iterable<VehicleReport> report, Collector<Tuple6<Double, Integer, Integer, Integer, Integer, Integer>> col) {
 
             int initialPos = Integer.MAX_VALUE;
             int initialTime = Integer.MAX_VALUE;
@@ -86,8 +83,8 @@ public class AverageSpeedControl {
 
             //Now we take the values that exceed the speed limit and completed the segment
             if( averageSpeed > 60 && firstSegment == 52 && lastSegment == 56){
-                Tuple6<Double, Integer, Integer, Integer, Integer, Integer> output = new Tuple6(averageSpeed, initialTime, finalTime, key.f0, key.f1, key.f2);
-                col.collect(output);
+                Tuple6<Double, Integer, Integer, Integer, Integer, Integer> result = new Tuple6(averageSpeed, initialTime, finalTime, key.f0, key.f1, key.f2);
+                col.collect(result);
 
             }
         }
