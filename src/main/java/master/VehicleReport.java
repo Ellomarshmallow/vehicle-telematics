@@ -1,76 +1,78 @@
 package master;
 
-public class VehicleReport {
-    public int time;
-    public int vid;
-    public int speed;
-    public int highway;
-    public int lane;
-    public int direction;
-    public int segment;
-    public int position;
+import org.apache.flink.api.java.tuple.Tuple8;
 
-    public int getTime() {
-        return time;
+public class VehicleReport extends Tuple8<Integer,Integer,Integer,Integer,Integer,Integer,Integer,Integer> {
+
+    public VehicleReport (){
+        
     }
 
-    public int getVid() {
-        return vid;
+    public Integer getTime() {
+        return f0;
     }
 
-    public int getSpeed() {
-        return speed;
+    public Integer getVid() {
+        return f1;
     }
 
-    public int getHighway() {
-        return highway;
+    public Integer getSpeed() {
+        return f2;
     }
 
-    public void getLane(int lane) {
-        this.lane = lane;
+    public Integer getHighway() {
+        return f3;
     }
 
-    public int getDirection() {
-        return direction;
+    public Integer getLane() {
+        return f4;
     }
 
-    public int getSegment() {
-        return segment;
+    public Integer getDirection() {
+        return f5;
     }
 
-    public int getPosition() {
-        return position;
+    public Integer getSegment() {
+        return f6;
+    }
+
+    public Integer getPosition() {
+        return f7;
     }
 
     public void setTime(int time) {
-        this.time = time;
+       f0 = time;
     }
 
     public void setVid(int vid) {
-        this.vid = vid;
+        f1 = vid;
     }
 
     public void setSpeed(int speed) {
-        this.speed = speed;
+        f2 = speed;
     }
 
     public void setHighway(int highway) {
-        this.highway = highway;
+        f3 = highway;
     }
 
     public void setLane(int lane) {
-        this.lane = lane;
+        f4 = lane;
     }
 
     public void setDirection(int direction) {
-        this.direction = direction;
+        f5 = direction;
     }
 
     public void setSegment(int segment) {
-        this.segment = segment;
+        f6 = segment;
     }
 
     public void setPosition(int position) {
-        this.position = position;
+        f7 = position;
+    }
+
+    String speedFineOutput(VehicleReport result) {
+        return String.format("%s,%s,%s,%s,%s,%s", result.getTime(),result.getVid(), result.getDirection(),result.getHighway(), result.getLane(),result.getSegment(),result.getSpeed());
     }
 }
