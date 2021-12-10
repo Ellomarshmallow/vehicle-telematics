@@ -29,7 +29,7 @@ public class AccidentReporter {
 
             @Override
             public Tuple5<Integer,Integer,Integer, Integer, Integer> getKey(VehicleReport v) {
-                return Tuple5.of(v.getVid(),v.getHighway(),v.getSegment(), v.getDirection(), v.getPosition());
+                return  new Tuple5<>(v.getVid(),v.getHighway(),v.getSegment(), v.getDirection(), v.getPosition());
                 
             }
 
