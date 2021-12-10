@@ -48,31 +48,16 @@ public class VehicleReport extends Tuple8<Integer,Integer,Integer,Integer,Intege
         f1 = vid;
     }
 
-    public void setSpeed(int speed) {
-        f2 = speed;
-    }
-
     public void setHighway(int highway) {
-        f3 = highway;
+        f2 = highway;
     }
-
-    public void setLane(int lane) {
-        f4 = lane;
-    }
-
-    public void setDirection(int direction) {
-        f5 = direction;
-    }
-
     public void setSegment(int segment) {
-        f6 = segment;
+        f3 = segment;
     }
-
-    public void setPosition(int position) {
-        f7 = position;
+    public void setDirection(int direction) {
+        f4 = direction;
     }
-
-    String speedFineOutput(VehicleReport result) {
-        return String.format("%s,%s,%s,%s,%s,%s", result.getTime(),result.getVid(), result.getDirection(),result.getHighway(), result.getLane(),result.getSegment(),result.getSpeed());
+    public void setSpeed(int speed) {
+        f5 = speed;
     }
 }
